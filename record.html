@@ -1,0 +1,49 @@
+
+<body>
+    <header>
+      <h1>Record and Play Audio in JavaScript</h1>
+    </header>
+  
+  <script>
+  let dataArray =[];
+  let audioIN = { audio: true };
+  navigator.mediaDevices.getUserMedia(audioIN)
+  
+  .then(function (mediaStreamObj) {
+            let audio = document.querySelector('audio');
+            let start = document.getElementById('btnStart');
+            let stop = document.getElementById('btnStop');
+            let playAudio = document.getElementById('adioPlay');
+            let mediaRecorder = new MediaRecorder(mediaStreamObj);
+    start.addEventListener('click', function (ev) {
+      mediaRecorder.start(); 
+     
+     })
+  
+    stop.addEventListener('click', function (ev) {
+      mediaRecorder.stop();   });
+  
+    mediaRecorder.ondataavailable = function (ev) {
+      dataArray.push(ev.data);  }
+    mediaRecorder.onstop = function (ev) {
+          let audioData = new Blob(dataArray,{'type': 'audio/mp3;' });
+          dataArray =[];
+          let audioSrc = window.URL.createObjectURL(audioData);
+          console.log(audioSrc);  
+          playAudio.src = audioSrc; }
+        
+        
+    })
+  
+  .catch(function (err) {
+    console.log(err.name, err.message);});
+  </script>
+  
+    <p>
+      <button id="btnStart">START RECORDING</button>
+      <button id="btnStop">STOP RECORDING</button>
+    </p>
+    <audio id="adioPlay" controls></audio>
+    </body>
+    </html>
+    
